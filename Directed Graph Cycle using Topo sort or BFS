@@ -1,0 +1,27 @@
+class Solution:
+    def isCyclic(self, V, edges):
+        # code here
+        adj = [] 
+        for _ in range(V):
+            adj.append([]) 
+        for n,m in edges:
+            adj[n].append(m) 
+        inDegre = [0]*V 
+        for i in range(0,V):
+            for j in adj[i]:
+                inDegre[j]+=1
+        q = deque([])
+        for i in range(0,V):
+            if(inDegre[i] == 0):
+                q.append(i)
+        ans = []
+        while(q):
+            node = q.popleft() 
+            ans.append(node)
+            for i in adj[node]:
+                inDegre[i]-=1 
+                if(inDegre[i] == 0):
+                    q.append(i)
+        if(len(ans)!=V):
+            return True 
+        return False
