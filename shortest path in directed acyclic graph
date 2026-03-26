@@ -1,37 +1,38 @@
 #User function Template for python3
-
+from collections import deque
 from typing import List
 class Solution:
     def shortestPath(self, V: int, E: int,edges: List[List[int]]) -> List[int]:
         adj = [] 
-        for _ in range(0,V):
-            adj.append([]) 
+        for _ in range(V):
+            adj.append([])
         for n,m,edgeWt in edges:
             adj[n].append((m,edgeWt)) 
-        inDegre = [0]*V 
+        inDegre =[0]*V 
         for i in range(0,V):
             for j,_ in adj[i]:
                 inDegre[j]+=1 
-        stack = [] 
+        q = deque([])
         for i in range(0,V):
             if(inDegre[i] == 0):
-                stack.append(i)    
-        lst = [] 
-        while(stack):
-            node = stack.pop() 
-            lst.append(node) 
+                q.append(i) 
+        lst = []
+        while(q):
+            node = q.popleft()
+            lst.append(node)
             for i,_ in adj[node]:
-                inDegre[i]-=1 
+                inDegre[i]-=1
                 if(inDegre[i] == 0):
-                    stack.append(i) 
-        distance = [float("inf")]*V
-        distance[0] = 0
+                    q.append(i)
+        lst = lst[::-1]
+        distance = [float("inf")]*V 
+        distance[0] = 0 
         while(lst):
-            node = lst.pop(0)
-            if distance[node] != float("inf"):
-                for n,edgeWt in adj[node]:
-                    if(distance[node]+edgeWt<distance[n]):
-                        distance[n] = distance[node]+edgeWt
+            node = lst.pop() # 6
+            # n = 4 , edgeWt = 2
+            for n,edgeWt in adj[node]:
+                if(distance[node]+edgeWt<distance[n]):
+                    distance[n] = distance[node]+edgeWt
         for i in range(0,V):
             if(distance[i] == float("inf")):
                 distance[i] = -1
