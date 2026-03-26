@@ -1,0 +1,39 @@
+  n = len(words)
+        longest = 0
+        s = set()
+        for word in words:
+            for ch in word:
+                s.add(ch) 
+        longest = len(s) 
+        adj = []
+        for i in range(0,longest):
+            adj.append([]) 
+        for i in range(0,n-1):
+            s1 = words[i]
+            s2 = words[i+1] 
+            for j in range(0,min(len(s1),len(s2))):
+                if(s1[j]!=s2[j]):
+                    adj[ord(s1[j])-ord('a')].append(ord(s2[j])-ord('a'))
+                    break
+        inDegre = [0]*longest 
+        for i in range(0,longest):
+            for j in adj[i]:
+                inDegre[j]+=1 
+        q = deque([])
+        for i in range(0,longest):
+            if(inDegre[i] == 0):
+                q.append(i)
+        ans = []
+        while(q):
+            node = q.popleft()
+            ans.append(node) 
+            for i in adj[node]:
+                inDegre[i]-=1 
+                if(inDegre[i] == 0):
+                    q.append(i)
+        if(len(ans)!=longest):
+            return ""
+        result = ""
+        for num in ans:
+            result+=chr(ord('a')+num) 
+        return result
